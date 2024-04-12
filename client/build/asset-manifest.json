@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9bb04abb.css",
+    "main.js": "/static/js/main.608c5719.js",
+    "static/media/logo.png": "/static/media/logo.a5d12c5956a00ff2fb23.png",
+    "static/media/user-default.png": "/static/media/user-default.8973ad91ff3039f96c89.png",
+    "static/media/birdlogo.svg": "/static/media/birdlogo.5a72eb152cd2488b3743a6fead942e1f.svg",
+    "static/media/blackbirdlogo.svg": "/static/media/blackbirdlogo.402579ac4b65b92e58f06012fa65496a.svg",
+    "index.html": "/index.html",
+    "main.9bb04abb.css.map": "/static/css/main.9bb04abb.css.map",
+    "main.608c5719.js.map": "/static/js/main.608c5719.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9bb04abb.css",
+    "static/js/main.608c5719.js"
+  ]
+}
