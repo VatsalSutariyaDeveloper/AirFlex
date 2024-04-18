@@ -6,6 +6,10 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Checkout = () => {
   const [formData, setFormData] = useState({
+    id: "",
+    userName: "",
+    email: "",
+    phone: "",
     country: "India",
     address: "",
     apartment: "",
@@ -31,6 +35,10 @@ const Checkout = () => {
 
       // Populate the form fields with the user's data
       setFormData({
+        id: userData?._id || "",
+        userName: userData?.userName || "",
+        email: userData?.email || "",
+        phone: userData?.phone || "",
         country: userData?.country || "India",
         address: userData?.address || "",
         city: userData?.city || "",
@@ -106,7 +114,9 @@ const Checkout = () => {
     e.preventDefault();
     try {
       const response = await axios.get(
-        `${window.react_app_url + window.validate_coupon_code_url}/${couponCode}`
+        `${
+          window.react_app_url + window.validate_coupon_code_url
+        }/${couponCode}`
       );
 
       const couponDetails = response.data.data;
@@ -148,6 +158,133 @@ const Checkout = () => {
     }
   };
 
+  const paymentHandler = async (e) => {
+    const emptyFields = Object.values(formData).filter(
+      (value) => value.trim() === ""
+    );
+    if (emptyFields.length > 0) {
+      toast.error("Please fill in all the required fields", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    }
+
+    const OrderData = {
+      amount: parseInt((subtotal - couponDiscount) * 100),
+      currency: "INR",
+    };
+
+    const response = await axios.post(
+      `${window.react_app_url + window.genrate_orderid_url}`,
+      OrderData
+    );
+
+    const order = response.data.order;
+
+    var options = {
+      key: "rzp_test_50uVL4bi6jWVM7",
+      amount: parseInt(order.amount),
+      currency: order.currency,
+      name: "AirFlex",
+      description: "Buy a Shoes.",
+      image: "https://example.com/your_logo",
+      order_id: order.id,
+      handler: async function (response) {
+        const orderData = {
+          userToken: cookies.user,
+          couponId: couponCode,
+          discountAmount: couponDiscount,
+          orderDate: new Date(),
+          paymentType: "Online",
+          products: cartItems.map((item) => ({
+            productId: item._id,
+            quantity: item.quantity,
+            size: item.size,
+          })),
+          totalAmount: subtotal - couponDiscount,
+          onlineOrderId: response.razorpay_order_id,
+          onlinPaymentId: response.razorpay_payment_id,
+          paymentStatus: "Paid",
+          ...formData,
+        };
+
+        try {
+          const response = await axios.post(
+            `${window.react_app_url + window.order_url}`,
+            orderData
+          );
+          if (response.data.status == true) {
+            toast.success(response.data.message, {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+            localStorage.removeItem("cart-items");
+            navigate("/");
+          } else {
+            toast.error(response.data.message, {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+          }
+        } catch (error) {
+          toast.error(error.response.data.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
+      },
+      prefill: {
+        name: formData.userName,
+        email: formData.email,
+        contact: formData.phone,
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    var rzp1 = new window.Razorpay(options);
+    rzp1.on("payment.failed", function (response) {
+      alert(response.error.code);
+      alert(response.error.description);
+      alert(response.error.source);
+      alert(response.error.step);
+      alert(response.error.reason);
+      alert(response.error.metadata.order_id);
+      alert(response.error.metadata.payment_id);
+    });
+
+    rzp1.open();
+    e.preventDefault();
+  };
+
   const handlePlaceOrder = async () => {
     const emptyFields = Object.values(formData).filter(
       (value) => value.trim() === ""
@@ -179,7 +316,7 @@ const Checkout = () => {
       })),
       totalAmount: subtotal - couponDiscount,
       onlinPaymentId: "",
-      bankPaymentId: "",
+      onlineOrderId: "",
       paymentStatus: "Pending",
       ...formData,
     };
@@ -401,7 +538,14 @@ const Checkout = () => {
                   <div className="payment-accordion">
                     <div className="order-button-payment">
                       <input
-                        value="Place order"
+                        value="Place order With online payment"
+                        type="button"
+                        onClick={paymentHandler}
+                      />
+                    </div>
+                    <div className="order-button-payment">
+                      <input
+                        value="Place order with cash on delivery"
                         type="button"
                         onClick={handlePlaceOrder}
                       />

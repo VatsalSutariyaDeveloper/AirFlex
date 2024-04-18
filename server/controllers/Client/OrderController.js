@@ -3,12 +3,13 @@ const OrderItem = require("../../schema/Client/OrderItemSchema");
 const PaymentDetail = require("../../schema/Client/PaymentDetailSchema");
 const constant = require("../../config/Constant");
 const User = require("../../schema/Client/UserSchema");
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
 
 exports.index = async (req, res) => {
   try {
     // Fetch orders along with their related items and payment details
-    const orders = await Order.find()
-      .sort({ createdAt: -1 })
+    const orders = await Order.find().sort({ createdAt: -1 });
     res.status(200).json({
       status: true,
       message: constant.MSG_FOR_GET_ORDER_DATA_SUCCESSFULLY,
@@ -30,7 +31,7 @@ exports.store = async (req, res) => {
       products,
       totalAmount,
       onlinPaymentId,
-      bankPaymentId,
+      onlineOrderId,
       paymentStatus,
       address,
       city,
@@ -79,9 +80,9 @@ exports.store = async (req, res) => {
       orderDate: orderDate ? orderDate : "",
       paymentType: paymentType,
     };
-    
+
     const createdOrder = await Order.create(OrderData);
-    const orderId = createdOrder._id; 
+    const orderId = createdOrder._id;
 
     const orderItems = products.map((product) => {
       return {
@@ -95,12 +96,13 @@ exports.store = async (req, res) => {
     const orderItem = await OrderItem.insertMany(orderItems);
 
     const PaymentData = {
+      orderId: orderId,
       totalAmount: totalAmount,
       onlinPaymentId: onlinPaymentId ? onlinPaymentId : "",
-      bankPaymentId: bankPaymentId ? bankPaymentId : "",
+      onlineOrderId: onlineOrderId ? onlineOrderId : "",
       paymentStatus: paymentStatus ? paymentStatus.trim() : "",
     };
-    const orderPayment = await Order.create(PaymentData);
+    const orderPayment = await PaymentDetail.create(PaymentData);
 
     res.status(201).json({
       status: true,
@@ -178,5 +180,43 @@ exports.counts = async (req, res) => {
     res.json({ status: true, count: count });
   } catch (error) {
     res.status(500).json({ status: false, error: "Could not count event" });
+  }
+};
+
+exports.genrateOrderId = async (req, res) => {
+  try {
+    const instance = new Razorpay({
+      key_id: process.env.RAZORPAY_API_KEY,
+      key_secret: process.env.RAZORPAY_API_SECRET,
+    });
+
+    var options = req.body;
+    const order = await instance.orders.create(options);
+
+    if (order) {
+      res.json({ status: true, order: order });
+    }else{
+      res.status(500).json({ status: false, error: "Order Id Not Created"});
+    }
+  } catch (error) {
+    res.status(500).json({ status: false, error: "Somthing went Wrong." });
+  }
+};
+
+exports.verifyPayment = async (req, res) => {
+  try {
+    const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
+    console.log(razorpay_payment_id);
+    const sha = crypto.createHmac("sha256", process.env.RAZORPAY_API_SECRET);
+    sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+    const digest = sh.digest("hex");
+
+    if(digest !== razorpay_signature){
+      res.status(400).json({ status: false, error: "Payment is not verified." });
+    }else{
+      res.json({ status: true, orderid: razorpay_order_id, paymentid: razorpay_payment_id });
+    }
+  } catch (error) {
+    res.status(500).json({ status: false, error: "Somthing went Wrong." });
   }
 };

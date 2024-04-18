@@ -21,7 +21,7 @@ const productStockAndSize = require('./routes/Admin/ProductStockAndSize');
 const Review = require('./routes/Client/Review');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-
+ 
 // Define CORS options
 const corsOptions = {
     origin: 'http://localhost:3000',

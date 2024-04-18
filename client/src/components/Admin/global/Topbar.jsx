@@ -4,7 +4,9 @@ import blackbirdlogo from "../../../assets/Admin/icons/blackbirdlogo.svg";
 import { FaSearch } from "react-icons/fa";
 import Dashboard from "../home/Dashboard";
 import { Link } from "react-router-dom";
-import logo from '../../../assets/logo.png'
+import logo from '../../../assets/logo.png';
+import logo2 from '../../../assets/logo2.png';
+import smalllogo from '../../../assets/small-logo.png';
 import axios from "axios";
 
 const Topbar = ({ open, setOpen }) => {
@@ -31,14 +33,13 @@ const Topbar = ({ open, setOpen }) => {
     <>
       <div className="2xl:container 2xl:mx-auto">
         <div className="bg-slate-300 rounded shadow-lg py-3 px-4">
-          <nav className="flex justify-between">
+          <nav className="flex justify-between h-14">
             <div className="flex items-center space-x-3 lg:pr-6">
               {open ? (
-                <img src={blackbirdlogo} alt=""
-                 className="cursor-pointer" 
-                 width={34} height={34} />
+                <img src={smalllogo} alt=""
+                className="cursor-pointer w-16 h-12" />
               ) : (
-                <img src={logo} alt="" className="cursor-pointer w-18 h-9" />
+                <img src={logo} alt="" className="cursor-pointer w-20 h-16" />
               )}
             </div>
             <div className="hidden md:flex flex-auto">
@@ -58,7 +59,7 @@ const Topbar = ({ open, setOpen }) => {
               <Link to="/admin-profile">
                 <img
                   src={image}
-                  className={`w-10 h-10 rounded-full border-2 shadow-lg cursor-pointer duration-500 ${open && "rotate-[360deg]"}`}
+                  className={`w-10 h-10 rounded-full border-2 shadow-lg cursor-pointer duration-500`}
                 />
               </Link>
             </div>

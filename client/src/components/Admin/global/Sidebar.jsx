@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import birdlogo from "../../../assets/Admin/icons/birdlogo.svg";
+import smalllogo from '../../../assets/small-logo.png';
 import {
   AiOutlineDashboard,
   AiOutlineUser,
@@ -77,8 +78,8 @@ const Sidebar = ({ open, setOpen }) => {
     <aside className="fixed">
       <div
         className={` ${
-          open ? "w-72" : "w-20 "
-        } bg-primary-black h-screen p-5  pt-8 relative duration-300`}
+          open ? "w-72" : "w-28 "
+        } bg-primary-black h-screen pl-5 relative duration-300`}
       >
         <img
           src={Control}
@@ -91,20 +92,20 @@ const Sidebar = ({ open, setOpen }) => {
           {open ? (
             <img
               src={logo}
-              className="w-28 h-12 cursor-pointer duration-500"
+              className="w-28 h-24 cursor-pointer duration-500 mt-4"
             />
           ) : (
             <img
-              src={birdlogo}
-              className="w-28 h-12 cursor-pointer duration-500"
+              src={smalllogo}
+              className="h-8 cursor-pointer duration-500 mt-24 ml-6"
             />
           )}
         </div>
 
         <div className={` menu-container ${
-          open ? "w-60" : "w-14"
+          open ? "w-68 mt-[-20px]" : ""
         } overflow-y-auto h-[calc(100vh-100px)]`}>
-          <ul className="pt-6">
+          <ul className="pt-16">
             {Menus.map((Menu, index) => (
               <Link key={index} to={Menu.link}>
                 <li

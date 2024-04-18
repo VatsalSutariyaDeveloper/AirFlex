@@ -32,39 +32,41 @@ const Header = () => {
   };
   return (
     <>
-      <div className="popup_wrapper">
-        <div className="test">
-          <span className="popup_off">Close</span>
-          <div className="subscribe_area text-center mt-4">
-            <h2>Newsletter</h2>
-            <p>
-              Subscribe to the Makali mailing list to receive updates on new
-              arrivals, special offers and other discount information.
-            </p>
-            <div className="subscribe-form-group">
-              <form action="#">
-                <input
-                  autoComplete="off"
-                  type="text"
-                  name="message"
-                  id="message"
-                  placeholder="Enter your email address"
-                />
-                <button type="submit">subscribe</button>
-              </form>
+       {cookies.user ? null : (
+        <div className="popup_wrapper">
+          <div className="test">
+            <span className="popup_off">Close</span>
+            <div className="subscribe_area text-center mt-4">
+              <h2>Newsletter</h2>
+              <p>
+                Subscribe to the Makali mailing list to receive updates on new
+                arrivals, special offers and other discount information.
+              </p>
+              <div className="subscribe-form-group">
+                <form action="#">
+                  <input
+                    autoComplete="off"
+                    type="text"
+                    name="message"
+                    id="message"
+                    placeholder="Enter your email address"
+                  />
+                  <button type="submit">subscribe</button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <header>
         <div className="main-header stick header-sticky">
           <div className="container-fluid">
             <div className="row">
               <div className="col-lg-2 col-md-3 col-2">
-                <div className="logo">
-                  <NavLink to="add-booking">
-                    <img src="images/menu/logo/1.png" alt="" />
+                <div className="logo w-28 ml-8">
+                  <NavLink to="/">
+                    <img src="images/menu/logo/logo.png" alt="" />
                   </NavLink>
                 </div>
               </div>

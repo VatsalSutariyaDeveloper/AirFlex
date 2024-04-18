@@ -180,7 +180,7 @@ const Profile = () => {
         <div className="container mx-auto px-4">
           <div className="relative flex flex-col min-w-0 break-words bg-slate-100 w-full mb-6 shadow-xl rounded-lg -mt-64">
             <div className="px-6">
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <div className="mt-12 flex justify-center items-center">
                   <label htmlFor="profile-image" className="cursor-pointer">
                     {image ? (

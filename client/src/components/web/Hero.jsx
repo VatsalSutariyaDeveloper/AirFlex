@@ -19,7 +19,10 @@ const fetchData = async () => {
     const result = await axios.get(
       `${window.react_app_url + window.product_url}`
     );
-    return result.data.data;
+    const activeProducts = result.data.data.filter(
+      (product) => product.status === "Active"
+    );
+    return activeProducts;
   } catch (error) {
     console.error(error);
     return null;
@@ -152,7 +155,7 @@ const Hero = () => {
       });
     } else {
       // Add the item to the cart with a default quantity of 1
-      const newItem = { productId, quantity: 1 };
+      const newItem = { productId, size: '8', quantity: 1 };
       updatedCartItems = [...cartItems, newItem];
       toast.success("Product Succefully Add in Cart", {
         position: "top-right",
@@ -204,8 +207,6 @@ const Hero = () => {
       bgClass: "bg-2",
     },
   ];
-  
-  
 
   const testimonials = [
     {
@@ -387,7 +388,7 @@ const Hero = () => {
                     items={4}
                     dots={false}
                   >
-                    {productList.map((product) => (
+                    {productList.slice(0, 10).map((product) => (
                       <div key={product._id} className="product-slide-item">
                         <div className="single-product">
                           <div className="product-img">
@@ -428,7 +429,7 @@ const Hero = () => {
                             <div className="product-action">
                               <div className="product-action-inner">
                                 <div className="cart">
-                                  {cartItems.includes(product._id) ? (
+                                  {cartItems.some((item) => item.productId === product._id)  ? (
                                     <NavLink
                                       onClick={() =>
                                         toggleCartItems(product._id)
@@ -518,6 +519,18 @@ const Hero = () => {
                         </div>
                       </div>
                     ))}
+                    {/* <div className="product-slide-item">
+                      <div className="single-product">
+                        <div className="product-img">
+                          <NavLink
+                            to="/shop"
+                            className="block w-64 h-36 bg-gray-200 flex items-center justify-center"
+                          >
+                            <span className="text-center">Show More</span>
+                          </NavLink>
+                        </div>
+                      </div>
+                    </div> */}
                   </OwlCarousel>
                 )}
               </div>
@@ -589,13 +602,12 @@ const Hero = () => {
               {productList !== null && (
                 <OwlCarousel
                   className="featured-pro-active owl-carousel"
-                  loop
                   margin={10}
                   items={6}
                   nav
                   dots={false}
                 >
-                  {productList.map((product) => (
+                  {productList.slice(0, 20).map((product) => (
                     <div
                       key={product.id}
                       className="single-product single-featured-pro"
@@ -603,6 +615,7 @@ const Hero = () => {
                       <div className="product-img">
                         <NavLink
                           to="product-details"
+                          onClick={() => updateID(product._id)}
                           style={{
                             display: "block",
                             width: "250px",

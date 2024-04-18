@@ -1,40 +1,46 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { FaSearch } from 'react-icons/fa';
-import Button from '../../hooks/Button';
+import React, { useState, useEffect, useMemo } from "react";
+import { FaSearch } from "react-icons/fa";
+import Button from "../../hooks/Button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import BreadCrumb from '../../hooks/BreadCrumb';
-import axios from 'axios';
-import useDragAndDrop from '../../hooks/useDragAndDrop';
-import useAnimatedLoader from '../../hooks/useAnimatedLoader';
-import ConfirmDelete from '../../hooks/ConfirmDelete'
-const ProductStockAndSize = () => {
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import BreadCrumb from "../../hooks/BreadCrumb";
+import axios from "axios";
+import useDragAndDrop from "../../hooks/useDragAndDrop";
+import useAnimatedLoader from "../../hooks/useAnimatedLoader";
+import ConfirmDelete from "../../hooks/ConfirmDelete";
+import { usePagination, Pagination } from "../../hooks/Pagination";
 
+const ProductStockAndSize = () => {
   const [productStockAndSize, setProductStockAndSize] = useState([]);
   const [switchStates, setSwitchStates] = useState({});
-  const { loading, startAnimatedLoading, stopAnimatedLoading, Loader } = useAnimatedLoader();
-  const [searchQuery, setSearchQuery] = useState('');
+  const { loading, startAnimatedLoading, stopAnimatedLoading, Loader } =
+    useAnimatedLoader();
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     startAnimatedLoading();
 
     // Fetch data from the product table
-    axios.get(`${window.react_app_url + window.product_url}`)
-      .then(result => {
+    axios
+      .get(`${window.react_app_url + window.product_url}`)
+      .then((result) => {
         const productData = result.data.data;
         // Create a map to store product data by productId
         const productMap = {};
 
-        productData.forEach(product => {
+        productData.forEach((product) => {
           productMap[product._id] = product;
         });
         // Fetch data from the product_stock_size table
-        axios.get(`${window.react_app_url + window.product_stock_size}`)
-          .then(result => {
+        axios
+          .get(`${window.react_app_url + window.product_stock_size}`)
+          .then((result) => {
             const productStockData = result.data.data;
-            const combinedData = productStockData.map(item => {
-              const productName = productMap[item.productId] ? productMap[item.productId].name : '-';
+            const combinedData = productStockData.map((item) => {
+              const productName = productMap[item.productId]
+                ? productMap[item.productId].name
+                : "-";
               return {
                 ...item,
                 productName,
@@ -44,49 +50,54 @@ const ProductStockAndSize = () => {
             setProductStockAndSize(combinedData);
             stopAnimatedLoading();
           })
-          .catch(err => {
+          .catch((err) => {
             stopAnimatedLoading();
             console.log(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         stopAnimatedLoading();
         console.log(err);
       });
   }, []);
 
-
   const handleReorder = async (newOrder) => {
     try {
-      await axios.post(`${window.react_app_url + window.product_stock_size}/reorder`, { newOrder });
+      await axios.post(
+        `${window.react_app_url + window.product_stock_size}/reorder`,
+        { newOrder }
+      );
       return true;
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       return false;
     }
   };
 
-  const { draggedItem, handleDragStart, handleDragEnd } = useDragAndDrop(handleReorder);
+  const { draggedItem, handleDragStart, handleDragEnd } =
+    useDragAndDrop(handleReorder);
 
   useEffect(() => {
     const initialSwitchStates = {};
     productStockAndSize.forEach((productStockAndSize) => {
-      initialSwitchStates[productStockAndSize._id] = productStockAndSize.status === 'Active';
+      initialSwitchStates[productStockAndSize._id] =
+        productStockAndSize.status === "Active";
     });
     setSwitchStates(initialSwitchStates);
   }, [productStockAndSize]);
 
   useEffect(() => {
-    startAnimatedLoading()
-    axios.get(`${window.react_app_url + window.product_stock_size}`)
-      .then(result => {
+    startAnimatedLoading();
+    axios
+      .get(`${window.react_app_url + window.product_stock_size}`)
+      .then((result) => {
         setProductStockAndSize(result.data.data);
-        stopAnimatedLoading()
+        stopAnimatedLoading();
       })
-      .catch(err => {
-        stopAnimatedLoading()
-        console.log(err)
-      })
+      .catch((err) => {
+        stopAnimatedLoading();
+        console.log(err);
+      });
   }, []);
 
   const handleSearchChange = (e) => {
@@ -99,71 +110,90 @@ const ProductStockAndSize = () => {
       [id]: !prevSwitchStates[id],
     }));
 
-    const newStatus = switchStates[id] ? 'Inactive' : 'Active';
+    const newStatus = switchStates[id] ? "Inactive" : "Active";
 
-    axios.put(`${window.react_app_url + window.product_stock_size}/status/${id}`, { status: newStatus })
-      .then(res => {
+    axios
+      .put(`${window.react_app_url + window.product_stock_size}/status/${id}`, {
+        status: newStatus,
+      })
+      .then((res) => {
         const message = `Status updated to ${newStatus}`;
         toast.success(message, {
-          position: 'top-right',
+          position: "top-right",
           autoClose: 5000,
           hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
+          theme: "dark",
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
 
   const handleDelete = (id) => {
     ConfirmDelete()({
-      title: 'Confirm Deletion',
-      message: 'Are you sure you want to delete this?',
+      title: "Confirm Deletion",
+      message: "Are you sure you want to delete this?",
       onConfirm: () => deleteProductSizeAndStock(id),
     });
   };
 
   const deleteProductSizeAndStock = async (id) => {
     try {
-      const response = await axios.delete(`${window.react_app_url + window.product_stock_size}/${id}`);
-      setProductStockAndSize((prevProductSizeAndStock) => prevProductSizeAndStock.filter((productStockAndSize) => productStockAndSize._id !== id));
+      const response = await axios.delete(
+        `${window.react_app_url + window.product_stock_size}/${id}`
+      );
+      setProductStockAndSize((prevProductSizeAndStock) =>
+        prevProductSizeAndStock.filter(
+          (productStockAndSize) => productStockAndSize._id !== id
+        )
+      );
       toast.success(response.data.message, {
-        position: 'top-right',
+        position: "top-right",
         autoClose: 5000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'dark',
+        theme: "dark",
       });
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
   const filteredProductStockAndSize = useMemo(() => {
     return productStockAndSize.filter((productStockAndSize) => {
       if (productStockAndSize.productName) {
-        return productStockAndSize.productName.toLowerCase().includes(searchQuery.toLowerCase());
+        return productStockAndSize.productName
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
       }
       return false;
     });
   }, [productStockAndSize, searchQuery]);
 
-
+  const { currentPage, totalPages, handlePageChange, currentItems } =
+    usePagination(filteredProductStockAndSize);
   return (
     <>
       <div className="p-2 flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
-        <BreadCrumb title="Product Size & Stock " desc="" link="/admin-product-stock-size" />
+        <BreadCrumb
+          title="Product Size & Stock "
+          desc=""
+          link="/admin-product-stock-size"
+        />
         <div className="flex flex-wrap items-start justify-end -mb-3 p-4">
           <Link to="/admin-product-stock-size-add">
-            <Button label="Add new Product Size & Stock" iconURL={<AiOutlinePlus />} />
+            <Button
+              label="Add new Product Size & Stock"
+              iconURL={<AiOutlinePlus />}
+            />
           </Link>
         </div>
       </div>
@@ -183,7 +213,6 @@ const ProductStockAndSize = () => {
           />
         </div>
       </div>
-
 
       <div className="container mx-auto px-4 sm:px-8">
         {loading ? (
@@ -213,73 +242,115 @@ const ProductStockAndSize = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredProductStockAndSize.map((productStockAndSize, index) => (
-                      <tr
-                        key={productStockAndSize._id}
-                        draggable
-                        onDragStart={() => handleDragStart(productStockAndSize)}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={() => handleDragEnd(index, filteredProductStockAndSize, setProductStockAndSize)}
-                      >
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <div className="flex">
-                            <div className="ml-3">
-                              <p className="text-gray-900 whitespace-no-wrap">{productStockAndSize.productName}</p>
+                    {filteredProductStockAndSize.map(
+                      (productStockAndSize, index) => (
+                        <tr
+                          key={productStockAndSize._id}
+                          draggable
+                          onDragStart={() =>
+                            handleDragStart(productStockAndSize)
+                          }
+                          onDragOver={(e) => e.preventDefault()}
+                          onDrop={() =>
+                            handleDragEnd(
+                              index,
+                              filteredProductStockAndSize,
+                              setProductStockAndSize
+                            )
+                          }
+                        >
+                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <div className="flex">
+                              <div className="ml-3">
+                                <p className="text-gray-900 whitespace-no-wrap">
+                                  {productStockAndSize.productName}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <div className="flex">
-                            <div className="ml-3">
-                              <p className="text-gray-900 whitespace-no-wrap">{productStockAndSize.size}</p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <div className="flex">
+                              <div className="ml-3">
+                                <p className="text-gray-900 whitespace-no-wrap">
+                                  {productStockAndSize.size}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <div className="flex">
-                            <div className="ml-3">
-                              <p className="text-gray-900 whitespace-no-wrap">{productStockAndSize.stockQuantity}</p>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <div className="flex">
+                              <div className="ml-3">
+                                <p className="text-gray-900 whitespace-no-wrap">
+                                  {productStockAndSize.stockQuantity}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
-                          <label className="relative inline-flex cursor-pointer">
-                            <input type="checkbox" className="sr-only peer"
-                              id={`flexSwitchCheckChecked_${productStockAndSize._id}`}
-                              checked={switchStates[productStockAndSize._id] || false}
-                              onChange={() => handleStatusChange(productStockAndSize._id)}
-                            />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                          </label>
-                        </td>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm space-x-2">
-                          <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                            <span aria-hidden className="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                            <span className="relative">
-                              <Link to={`update/${productStockAndSize._id}`}>
-                                <button>Edit</button>
-                              </Link>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <label className="relative inline-flex cursor-pointer">
+                              <input
+                                type="checkbox"
+                                className="sr-only peer"
+                                id={`flexSwitchCheckChecked_${productStockAndSize._id}`}
+                                checked={
+                                  switchStates[productStockAndSize._id] || false
+                                }
+                                onChange={() =>
+                                  handleStatusChange(productStockAndSize._id)
+                                }
+                              />
+                              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm space-x-2">
+                            <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                              <span
+                                aria-hidden
+                                className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                              ></span>
+                              <span className="relative">
+                                <Link to={`update/${productStockAndSize._id}`}>
+                                  <button>Edit</button>
+                                </Link>
+                              </span>
                             </span>
-                          </span>
-                          <span className="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
-                            <span aria-hidden className="absolute inset-0 bg-yellow-200 opacity-50 rounded-full"></span>
-                            <span className="relative">
-                              <Link to={`view/${productStockAndSize._id}`}>
-                                <button>View</button>
-                              </Link>
+                            <span className="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
+                              <span
+                                aria-hidden
+                                className="absolute inset-0 bg-yellow-200 opacity-50 rounded-full"
+                              ></span>
+                              <span className="relative">
+                                <Link to={`view/${productStockAndSize._id}`}>
+                                  <button>View</button>
+                                </Link>
+                              </span>
                             </span>
-                          </span>
-                          <span className="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
-                            <span aria-hidden className="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
-                            <span className="relative">
-                              <button onClick={() => handleDelete(productStockAndSize._id)}>Delete</button>
+                            <span className="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                              <span
+                                aria-hidden
+                                className="absolute inset-0 bg-red-200 opacity-50 rounded-full"
+                              ></span>
+                              <span className="relative">
+                                <button
+                                  onClick={() =>
+                                    handleDelete(productStockAndSize._id)
+                                  }
+                                >
+                                  Delete
+                                </button>
+                              </span>
                             </span>
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  handlePageChange={handlePageChange}
+                />
               </div>
             ) : (
               <p className="text-center text-gray-500">No data found</p>
@@ -289,6 +360,6 @@ const ProductStockAndSize = () => {
       </div>
     </>
   );
-}
+};
 
-export default ProductStockAndSize
+export default ProductStockAndSize;

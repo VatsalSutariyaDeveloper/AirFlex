@@ -1,59 +1,3 @@
-/*-----------------------------------------------------------------------------------
-		Template Name: Raavin - Shoes eCommerce Bootstrap 5 Template
-		Template URI: http://bootexperts.com
-		Description: This is shoes HTML5 Template For eCommerce websites, nice and clean design;
-		Author: HasTech
-		Author URI: 
-		Version: 1.0.3.0
------------------------------------------------------------------------------------
-		CSS INDEX
-		===================
-		* Default Style
-			01. Basic
-			02. Transition
-			03. Section Title
-			04. Default Button
-			05. Text Color
-			06. Input
-			07. Margin And Padding Measurements
-			08. Background Variation Set 
-			09. Animation
-			10. Owl Carousel Nav/Dot Direction/Box Shadow
-			11. Newsletter Popup
-		* Home Page One Style
-			01. Header
-			02. Mobile Menu Customization
-			03. Slider
-			04. Servicer
-			05. Static Information
-			06. Banner Slider
-			07. New Product
-			08. Static Center
-			09. Testimonials
-			10. Featured Product
-			11. Blog
-			12. Static Bottom
-			13. Footer
-			14. Scroll Up
-		* Home Page Two Style 
-		* Home Page Three Style 
-		* Other Pages Style
-			01. 404
-			02. Portfolio
-			03. Shop
-			04. Product Details
-			05. About Us
-			06. FAQ
-			07. Services
-			08. Contact
-			09. Blog Page
-			10. Checkout
-			11. Shopping Cart
-			12. Wishlist
-			13. Modal Area
-			14. Login Register
------------------------------------------------------------------------------------*/
-
 /* Google Fonts------------------
 	font-family: 'Montserrat', sans-serif;
 	font-family: 'Roboto', sans-serif;
@@ -3473,10 +3417,10 @@ textarea:focus {
   transition: all 300ms ease-in 0s;
 }
 .main-header.stick.header-sticky.sticky .logo {
-  padding-top: 8px;
+  padding-top: 10px;
 }
 .main-header.stick.header-sticky.sticky .logo img {
-  max-width: 60px;
+  max-width: 82px;
 }
 .main-header.stick.header-sticky.sticky .main-menu nav > ul > li > a {
   padding: 30px 0;
@@ -4109,6 +4053,17 @@ textarea:focus {
 /*----------------------------------------*/
 /* 03. Shop
 /*----------------------------------------*/
+.category-list ul li{
+  font-size: 17px !important;
+}
+.category-list ul li h6{
+  font-weight: 600;
+  padding-left: 15px;
+}
+.size-list li a{
+  width: 250px;
+  padding-left: 50px !important;
+}
 .shop-area {
   float: left;
   width: 100%;
@@ -6512,6 +6467,9 @@ thead {
 /*----------------------------------------*/
 /* 12. Wishlist
 /*----------------------------------------*/
+.pro-list-content{
+  padding-top: 43px;
+}
 .table-content table {
   background: #fff none repeat scroll 0 0;
   border-color: #ebebeb;
@@ -7009,17 +6967,17 @@ li.list {
   
   .sub-category {
     list-style-type: none;
-    padding-left: 20px;
+    padding-left: 45px;
   }
   
   .sub-category li {
     margin-bottom: 5px;
   }
-  
+
   .category h4 {
-    font-size: 18px;
+    font-size: 19px;
     margin-bottom: 15px;
-    color: #333; /* Adjust the color as needed */
+    color: #333;
   }
   
 .comment-list {

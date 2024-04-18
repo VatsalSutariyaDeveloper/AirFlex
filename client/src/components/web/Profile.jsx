@@ -23,14 +23,12 @@ const Profile = () => {
     startLoading();
     try {
       const response = await axios.get(
-        `${window.react_app_url + window.user_url}`
+        `${window.react_app_url}${window.user_url}`
       );
       const user = response.data.data.find((user) => user.role === "user");
       setUserData(user);
       if (user.profileimg) {
-        setImage(
-          `${window.react_app_url}public/images/user/${user.profileimg}`
-        );
+        setImage(`${window.react_app_url}public/images/user/${user.profileimg}`);
       }
       stopLoading();
     } catch (error) {
@@ -49,7 +47,7 @@ const Profile = () => {
       reader.readAsDataURL(selectedImage);
     }
   };
-
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserData((prevUserData) => ({
@@ -65,45 +63,30 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     startLoading();
-
+  
     const formDataToSend = new FormData();
-    formDataToSend.append("userName", userData.userName);
-    formDataToSend.append("email", userData.email);
-    formDataToSend.append("phone", userData.phone);
-    formDataToSend.append("gender", userData.gender);
-
-    if (userData.profileimg) {
-      formDataToSend.append("profileimg", userData.profileimg);
+    formDataToSend.append("userName", userData?.userName || "");
+    formDataToSend.append("email", userData?.email || "");
+    formDataToSend.append("phone", userData?.phone || "");
+    formDataToSend.append("gender", userData?.gender || "");    
+  
+    if (image) {
+      formDataToSend.append("profileimg", image);
     }
-    if (isEditing) {
-      try {
-        const res = await axios.put(
-          `${window.react_app_url + window.user_url}/${userData._id}`,
-          formDataToSend,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        if (res.data.status) {
-          toast.success(res.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-          // navigate('/');
-          stopLoading();
+  
+    try {
+      const res = await axios.put(
+        `${window.react_app_url}${window.user_url}/${userData._id}`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-        stopLoading();
-      } catch (error) {
-        toast.error("Error updating user data", {
+      );
+  
+      if (res.data.status) {
+        toast.success(res.data.message, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: true,
@@ -113,12 +96,26 @@ const Profile = () => {
           progress: undefined,
           theme: "dark",
         });
+        setIsEditing(false);
         stopLoading();
+        fetchData(); 
       }
+    } catch (error) {
+      console.error("Error updating user data:", error);
+      toast.error("Error updating user data", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      stopLoading();
     }
-    setIsEditing(false);
   };
-
+  
   const handleCancel = () => {
     setIsEditing(false);
   };
@@ -243,26 +240,25 @@ const Profile = () => {
             )}
             {isEditing && (
               <div className="flex justify-end mt-3">
-              <Button
-                label="Cancel"
-                onClick={handleCancel}
-                fullWidth={false}
-                backgroundColor="bg-red-500"
-                textColor="text-white"
-                borderColor="border-red-500"
-                width="48"
-              />
-              <Button
-                label="Update"
-                type="submit"
-                fullWidth={false}
-                backgroundColor="bg-blue-500"
-                textColor="text-white"
-                borderColor="border-blue-500"
-                width="48"
-              />
-            </div>
-            
+                <Button
+                  label="Cancel"
+                  onClick={handleCancel}
+                  fullWidth={false}
+                  backgroundColor="bg-red-500"
+                  textColor="text-white"
+                  borderColor="border-red-500"
+                  width="48"
+                />
+                <Button
+                  label="Update"
+                  type="submit"
+                  fullWidth={false}
+                  backgroundColor="bg-blue-500"
+                  textColor="text-white"
+                  borderColor="border-blue-500"
+                  width="48"
+                />
+              </div>
             )}
           </form>
         </div>

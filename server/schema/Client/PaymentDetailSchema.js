@@ -4,7 +4,6 @@ const PaymentDetailSchema = new mongoose.Schema({
    
     orderId: {
         type: String,
-        required: true,
     },
     totalAmount: {    
         type: Number,
@@ -13,7 +12,7 @@ const PaymentDetailSchema = new mongoose.Schema({
     onlinPaymentId: {
         type: String,
     },
-    bankPaymentId: {
+    onlineOrderId: {
         type: String,
     },
     status: {

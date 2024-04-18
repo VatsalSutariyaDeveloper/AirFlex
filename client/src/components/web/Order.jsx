@@ -94,7 +94,7 @@ const Order = () => {
                                 <td className="raavin-product-thumbnail">
                                   <Link to="/product-details" onClick={() => updateID(product._id)}>
                                     <img
-                                      src={`${window.react_app_url}public/images/products/${product.productimg}`}
+                                      src={`${window.react_app_url}public/images/products/${product?.productimg}`}
                                       alt=""
                                       className="product-image"
                                     />
@@ -110,7 +110,7 @@ const Order = () => {
                                   {item.quantity}
                                 </td>
                                 <td className="raavin-product-price">
-                                  {(product.price * item.quantity).toFixed(2)}
+                                  {(product?.price * item.quantity).toFixed(2)}
                                 </td>
                                 <td className="raavin-product-price">
                                   {order.paymentType}

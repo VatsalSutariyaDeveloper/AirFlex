@@ -33,7 +33,7 @@ const ViewOrders = () => {
           <BreadCrumb
             title="Orders / "
             desc="View Order"
-            link="/admin-orders"
+            link="/admin-order"
           />
         </div>
       </div>
@@ -120,9 +120,6 @@ const ViewOrders = () => {
                           <th className="px-5 py-3 border-b-2 border-gray-200 bg-slate-200 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                             Quantity
                           </th>
-                          <th className="px-5 py-3 border-b-2 border-gray-200 bg-slate-200 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                            Amount
-                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -145,15 +142,6 @@ const ViewOrders = () => {
                                 <div className="ml-3">
                                   <p className="text-gray-600 whitespace-no-wrap">
                                     {item.quantity}
-                                  </p>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                              <div className="flex">
-                                <div className="ml-3">
-                                  <p className="text-gray-600 whitespace-no-wrap">
-                                    {item.amount}
                                   </p>
                                 </div>
                               </div>
@@ -183,29 +171,28 @@ const ViewOrders = () => {
                         </td>
                       </tr>
                       <tr className="px-5 py-5 border border-gray-200 bg-white text-sm">
-                        <th className="p-4">Payment Type</th>
+                        <th className="p-4">Payment Status</th>
                         <td>
-                          {orderData.paymentDetail.paymentType
-                            ? orderData.paymentDetail.paymentType
+                          {orderData.paymentDetail.status
+                            ? orderData.paymentDetail.status  
+                            : "-"}
+                        </td>
+                      </tr>
+                      <tr className="px-5 py-5 border border-gray-200 bg-white text-sm">
+                        <th className="p-4">Online Order Id</th>
+                        <td>
+                          {orderData.paymentDetail.onlineOrderId
+                            ? orderData.paymentDetail.onlineOrderId
                             : "-"}
                         </td>
                       </tr>
                       <tr className="px-5 py-5 border border-gray-200 bg-white text-sm">
                         <th className="p-4">Online Payment Id</th>
                         <td>
-                          {orderData.paymentDetail.onlinePaymentId
-                            ? orderData.paymentDetail.onlinePaymentId
+                          {orderData.paymentDetail.onlinPaymentId
+                            ? orderData.paymentDetail.onlinPaymentId
                             : "-"}
                         </td>{" "}
-                        {/* Corrected typo: onlinPaymentId to onlinePaymentId */}
-                      </tr>
-                      <tr className="px-5 py-5 border border-gray-200 bg-white text-sm">
-                        <th className="p-4">Bank Payment Id</th>
-                        <td>
-                          {orderData.paymentDetail.bankPaymentId
-                            ? orderData.paymentDetail.bankPaymentId
-                            : "-"}
-                        </td>
                       </tr>
                       <tr className="px-5 py-5 border border-gray-200 bg-white text-sm">
                         <th className="p-4">Status</th>

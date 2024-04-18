@@ -13,7 +13,7 @@ import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { IDContext } from "./hooks/IDContext";
 
-const productsPerPage = 6;
+const productsPerPage = 12;
 
 const useFormInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
@@ -64,7 +64,6 @@ const Shop = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can handle form submission here
     console.log("Email submitted: ", emailInput.value);
   };
 
@@ -172,7 +171,7 @@ const Shop = () => {
       });
     } else {
       // Add the item to the cart with a default quantity of 1
-      const newItem = { productId, quantity: 1 };
+      const newItem = { productId, size: '8', quantity: 1 };
       updatedCartItems = [...cartItems, newItem];
       toast.success("Product Succefully Add in Cart", {
         position: "top-right",
@@ -212,7 +211,8 @@ const Shop = () => {
     axios
       .get(`${window.react_app_url + window.product_url}`)
       .then((result) => {
-        setProducts(result.data.data);
+        const activeProducts = result.data.data.filter(product => product.status === 'Active');
+        setProducts(activeProducts);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -262,8 +262,9 @@ const Shop = () => {
   };
 
   const loadMore = () => {
-    setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 12);
+    setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + productsPerPage);
   };
+  
 
   return (
     <>
@@ -300,6 +301,7 @@ const Shop = () => {
                                 resetGender();
                                 handleGenderChange(null);
                                 handleCategoryChange(null);
+                                handleSizeChange(null);
                               }}
                               className={`${
                                 !selectedGender && !selectedCategory
@@ -499,7 +501,7 @@ const Shop = () => {
                                   <div className="product-action">
                                     <div className="product-action-inner">
                                       <div className="cart">
-                                        {cartItems.includes(product._id) ? (
+                                        {cartItems.some((item) => item.productId === product._id) ? (
                                           <NavLink
                                             onClick={() =>
                                               toggleCartItems(product._id)
@@ -608,7 +610,7 @@ const Shop = () => {
                       <div className="col-lg-12 p-0">
                         {visibleProducts < products.length && (
                           <div className="flex justify-center mt-4 mb-5">
-                            <button label="Load more" onClick={loadMore} />
+                            <button onClick={loadMore}>Load more</button>
                           </div>
                         )}
                       </div>
