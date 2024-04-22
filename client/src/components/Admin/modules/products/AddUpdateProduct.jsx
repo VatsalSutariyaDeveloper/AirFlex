@@ -15,6 +15,7 @@ const AddUpdateProduct = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const initialFormData = {
     name: "",
+    shortdescription: "",
     description: "",
     price: "",
     categoryid: "", // Initialize categoryid with an empty string
@@ -101,6 +102,7 @@ const AddUpdateProduct = () => {
     console.log(formData);
     if (
       !formData.name.trim() ||
+      !formData.shortdescription.trim() ||
       !formData.description.trim() ||
       !formData.price ||
       !formData.categoryid ||
@@ -139,6 +141,24 @@ const AddUpdateProduct = () => {
     if (!/[a-zA-Z]/.test(formData.description)) {
       toast.warning(
         "Description must contain at least one alphabet character.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        }
+      );
+      stopLoading();
+      return;
+    }
+
+    if (!/[a-zA-Z]/.test(formData.shortdescription)) {
+      toast.warning(
+        "Short Description must contain at least one alphabet character.",
         {
           position: "top-right",
           autoClose: 5000,
@@ -224,6 +244,7 @@ const AddUpdateProduct = () => {
       } else {
         const requiredFields = [
           "name",
+          "shortdescription",
           "description",
           "price",
           "categoryid",
@@ -337,6 +358,21 @@ const AddUpdateProduct = () => {
               onChange={handleInputChange}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="Enter Name"
+            />
+            <label
+              htmlFor="shortdescription"
+              className="mt-4 block text-sm font-medium text-gray-900 "
+            >
+              Short Description
+            </label>
+            <textarea
+              type="textarea"
+              id="shortdescription"
+              name="shortdescription"
+              value={formData.shortdescription}
+              onChange={handleInputChange}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Enter Short Description"
             />
             <label
               htmlFor="description"

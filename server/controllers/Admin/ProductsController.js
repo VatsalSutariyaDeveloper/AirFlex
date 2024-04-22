@@ -18,8 +18,8 @@ exports.index = async (req, res) => {
 exports.store = async (req, res) => {
   try {
   
-    const { name, description, categoryid, price } = req.body;
-    if (!name || !description || !categoryid || !price) {
+    const { name, shortdescription, description, categoryid, price } = req.body;
+    if (!name || !shortdescription || !description || !categoryid || !price) {
       return res.json({ status: false, message: 'All fields are required' });
     }
 
@@ -51,6 +51,7 @@ exports.store = async (req, res) => {
       productimg: productimgFilename,
       productthumbimg: productthumbimg,
       name: name,
+      shortdescription: shortdescription,
       description: description,
       categoryid: categoryid,
       price: price,
@@ -90,8 +91,8 @@ exports.update = async (req, res) => {
     }
 
   
-    const { name, description, categoryid, price } = req.body;
-    if (!name || !description || !categoryid || !price) {
+    const { name, shortdescription, description, categoryid, price } = req.body;
+    if (!name || !shortdescription || !description || !categoryid || !price) {
       return res.json({ status: false, message: 'All fields are required' });
     }
 
@@ -126,6 +127,7 @@ exports.update = async (req, res) => {
     }
 
     existingProduct.name = name.trim();
+    existingProduct.shortdescription = shortdescription.trim();
     existingProduct.description = description.trim();
     existingProduct.price = price.trim();
     existingProduct.categoryid = categoryid.trim();

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import birdlogo from "../../../assets/Admin/icons/birdlogo.svg";
-import smalllogo from '../../../assets/small-logo.png';
+import smalllogo from "../../../assets/small-logo.png";
 import {
   AiOutlineDashboard,
   AiOutlineUser,
@@ -36,18 +36,10 @@ const Sidebar = ({ open, setOpen }) => {
       gap: true,
       link: "/admin-users",
     },
-    { title: "Orders", icon: <AiOutlineShoppingCart />, link: "/admin-order" },
-    { title: "Sliders", icon: <LuGalleryThumbnails />, link: "/admin-sliders" },
-    { title: "FAQ's", icon: <AiFillQuestionCircle />, link: "/admin-faqs" },
     {
-      title: "Coupon Code",
-      icon: <BiSolidDiscount />,
-      link: "/admin-coupon-code",
-    },
-    {
-      title: "Contacts",
-      icon: <AiOutlineContacts />,
-      link: "/admin-contact-us",
+      title: "Product Category",
+      icon: <BiCategoryAlt />,
+      link: "/admin-product-categories",
     },
     {
       title: "Products",
@@ -59,18 +51,21 @@ const Sidebar = ({ open, setOpen }) => {
       icon: <BiSolidShoppingBags />,
       link: "/admin-product-stock-size",
     },
-    { title: "Sale", icon: <BsCalendar2Event />, link: "/admin-sale" },
+    { title: "FAQ's", icon: <AiFillQuestionCircle />, link: "/admin-faqs" },
+    { title: "Sliders", icon: <LuGalleryThumbnails />, link: "/admin-sliders" },
     {
-      title: "Product Category",
-      icon: <BiCategoryAlt />,
-      link: "/admin-product-categories",
+      title: "Coupon Code",
+      icon: <BiSolidDiscount />,
+      link: "/admin-coupon-code",
     },
-    {
-      title: "CMS Pages",
-      icon: <BiSelectMultiple />,
-      link: "/admin-cms-pages",
-    },
+    { title: "Orders", icon: <AiOutlineShoppingCart />, link: "/admin-order" },
     { title: "Reviews", icon: <BiSelectMultiple />, link: "/admin-review" },
+    {
+      title: "Contacts",
+      icon: <AiOutlineContacts />,
+      link: "/admin-contact-us",
+    },
+    // { title: "Sale", icon: <BsCalendar2Event />, link: "/admin-sale" },
   ];
   const isMenuActive = (link) => location.pathname.includes(link);
 
@@ -88,7 +83,11 @@ const Sidebar = ({ open, setOpen }) => {
           }`}
           onClick={() => setOpen(!open)}
         />
-        <div className={`${open ? "" : "w-8 h-8"} flex items-center justify-center`}>
+        <div
+          className={`${
+            open ? "" : "w-8 h-8"
+          } flex items-center justify-center`}
+        >
           {open ? (
             <img
               src={logo}
@@ -102,9 +101,11 @@ const Sidebar = ({ open, setOpen }) => {
           )}
         </div>
 
-        <div className={` menu-container ${
-          open ? "w-68 mt-[-20px]" : ""
-        } overflow-y-auto h-[calc(100vh-100px)]`}>
+        <div
+          className={` menu-container ${
+            open ? "w-68 mt-[-20px]" : ""
+          } overflow-y-auto h-[calc(100vh-100px)]`}
+        >
           <ul className="pt-16">
             {Menus.map((Menu, index) => (
               <Link key={index} to={Menu.link}>

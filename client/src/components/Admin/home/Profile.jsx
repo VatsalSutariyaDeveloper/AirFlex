@@ -10,32 +10,29 @@ const Profile = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["admin"]);
   const [image, setImage] = useState(null);
-  const [userData, setUserData] = useState("");
+  const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const initialFormData = {
     userName: "",
     email: "",
     profileimg: null,
   };
-  const toggleEditMode = () => {
-    setEditMode((prevEditMode) => !prevEditMode); // Toggle edit mode
-  };
-
   const [formData, setFormData] = useState(initialFormData);
+
+  const toggleEditMode = () => {
+    setEditMode((prevEditMode) => !prevEditMode);
+  };
 
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
-
     if (selectedImage) {
       const validImageTypes = ["image/jpeg", "image/png", "image/webp"];
-
       if (validImageTypes.includes(selectedImage.type)) {
         const reader = new FileReader();
         reader.onload = (e) => {
           setImage(e.target.result);
         };
         reader.readAsDataURL(selectedImage);
-
         setFormData((prevFormData) => ({
           ...prevFormData,
           profileimg: selectedImage,
@@ -64,42 +61,42 @@ const Profile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData((prevUserData) => ({
-      ...prevUserData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
     }));
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${window.react_app_url + window.user_url}`
-      );
-      const admin = response.data.data.find((user) => user.role === "admin");
-      setUserData(admin);
-      setFormData({
-        userName: admin.userName,
-        email: admin.email,
-        profileimg: formData.profileimg,
-      });
-      if (admin.profileimg) {
-        setImage(
-          `${window.react_app_url}public/images/user/${admin.profileimg}`
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${window.react_app_url + window.user_url}`
+        );
+        const admin = response.data.data.find((user) => user.role === "admin");
+        setUserData(admin);
+        setFormData({
+          userName: admin.userName,
+          email: admin.email,
+          profileimg: admin.profileimg,
+        });
+        if (admin.profileimg) {
+          setImage(
+            `${window.react_app_url}public/images/user/${admin.profileimg}`
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+  
+    if (!userData) {
+      fetchData();
+    }
+  }, [userData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formData.userName.trim() || !formData.email.trim()) {
       toast.error("All fields are required.", {
         position: "top-right",
@@ -161,7 +158,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     removeCookie("admin");
-    toast.success('Logout Succesfully.', {
+    toast.success("Logout Successfully.", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: true,
@@ -206,7 +203,6 @@ const Profile = () => {
                     />
                   </label>
                 </div>
-
                 <div className="mx-24 space-y-4">
                   <div>
                     <label
@@ -223,7 +219,7 @@ const Profile = () => {
                       onChange={handleInputChange}
                       className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
                         editMode ? "" : "pointer-events-none"
-                      }`} // Disable input when not in edit mode
+                      }`}
                     />
                   </div>
                   <div>
@@ -241,7 +237,7 @@ const Profile = () => {
                       onChange={handleInputChange}
                       className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
                         editMode ? "" : "pointer-events-none"
-                      }`} // Disable input when not in edit mode
+                      }`}
                     />
                   </div>
                 </div>
@@ -272,7 +268,7 @@ const Profile = () => {
             <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
               <div className="flex flex-wrap justify-center">
                 <div className="w-full lg:w-9/12 px-4">
-                  <Link to={`/admin-profile-change-password/${userData._id}`}>
+                  <Link to={`/admin-profile-change-password/${userData?._id}`}>
                     <p className="mb-4 text-lg leading-relaxed text-blue-700 cursor-pointer hover:underline">
                       Want to change Password?
                     </p>

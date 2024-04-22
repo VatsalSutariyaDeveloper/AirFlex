@@ -11,12 +11,12 @@ const Dashboard = () => {
 
     const sections = [
         {
-            name: 'Products',
-            url: `${window.react_app_url + window.product_url}/count`,
-            icon: <BiSolidShoppingBags />,
-            link: '/admin-products',
-            color: 'text-purple-600',
-            bgColor: 'bg-purple-100'
+            name: 'App Users',
+            url: `${window.react_app_url + window.user_url}/count`,
+            icon: <AiOutlineUser />,
+            link: '/admin-users',
+            color: 'text-indigo-600',
+            bgColor: 'bg-indigo-100'
         },
         {
             name: 'Product Category',
@@ -27,20 +27,20 @@ const Dashboard = () => {
             bgColor: 'bg-green-100'
         },
         {
+            name: 'Products',
+            url: `${window.react_app_url + window.product_url}/count`,
+            icon: <BiSolidShoppingBags />,
+            link: '/admin-products',
+            color: 'text-purple-600',
+            bgColor: 'bg-purple-100'
+        },
+        {
             name: 'Slider',
             url: `${window.react_app_url + window.slider_url}/count`,
             icon: <LuGalleryThumbnails />,
             link: '/admin-sliders',
             color: 'text-yellow-600',
             bgColor: 'bg-yellow-100'
-        },
-        {
-            name: 'CMS Page',
-            url: `${window.react_app_url + window.cms_page_url}/count`,
-            icon: <BiSelectMultiple />,
-            link: '/admin-cms-pages',
-            color: 'text-blue-600',
-            bgColor: 'bg-blue-100'
         },
         {
             name: "FAQ's",
@@ -59,14 +59,6 @@ const Dashboard = () => {
             bgColor: 'bg-teal-100'
         },
         {
-            name: 'Events',
-            url: `${window.react_app_url + window.sale_url}/count`,
-            icon: <BsCalendar2Event />,
-            link: '/admin-events',
-            color: 'text-amber-600',
-            bgColor: 'bg-amber-100'
-        },
-        {
             name: 'Orders',
             url: `${window.react_app_url + window.order_url}/count`,
             icon: <AiOutlineShoppingCart />,
@@ -82,14 +74,7 @@ const Dashboard = () => {
             color: 'text-purple-600',
             bgColor: 'bg-purple-100'
         },
-        {
-            name: 'App Users',
-            url: `${window.react_app_url + window.user_url}/count`,
-            icon: <AiOutlineUser />,
-            link: '/admin-users',
-            color: 'text-indigo-600',
-            bgColor: 'bg-indigo-100'
-        },
+        
     ];
 
     useEffect(() => {

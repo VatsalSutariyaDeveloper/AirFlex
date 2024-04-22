@@ -14,11 +14,11 @@ const Header = () => {
     if (storedCartItems) {
       setCartItems(JSON.parse(storedCartItems));
     }
-  },[]);
+  }, []);
 
   const logout = () => {
     removeCookie("user");
-    toast.success('Logout Succesfully.', {
+    toast.success("Logout Succesfully.", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: true,
@@ -32,7 +32,7 @@ const Header = () => {
   };
   return (
     <>
-       {cookies.user ? null : (
+      {cookies.user ? null : (
         <div className="popup_wrapper">
           <div className="test">
             <span className="popup_off">Close</span>
@@ -103,7 +103,7 @@ const Header = () => {
                       >
                         <NavLink to="about-us">About Us</NavLink>
                       </li>
-                      <li
+                      {/* <li
                         className={
                           location.pathname.startsWith("/portfolio")
                             ? "active"
@@ -111,7 +111,7 @@ const Header = () => {
                         }
                       >
                         <NavLink to="/portfolio">Portfolio</NavLink>
-                      </li>
+                      </li> */}
                       <li
                         className={
                           location.pathname.startsWith("/contact-us")
@@ -145,23 +145,9 @@ const Header = () => {
                     <nav>
                       <ul>
                         <li>
-                          <a href="#">
-                            <i className="fa fa-search"></i>Search
-                          </a>
-                          <ul className="dropdown header-search">
-                            <li>
-                              <form action="#">
-                                <input
-                                  type="text"
-                                  name="Enter key words"
-                                  value="Enter key words..."
-                                />
-                              </form>
-                              <button>
-                                <i className="fa fa-search"></i>
-                              </button>
-                            </li>
-                          </ul>
+                          <NavLink exact to="/wishlist">
+                            <i className="fa fa-heart"></i>My Wishlist
+                          </NavLink>
                         </li>
                       </ul>
                     </nav>
@@ -195,17 +181,6 @@ const Header = () => {
                             >
                               <NavLink exact to="/order">
                                 <i className="fa fa-shopping-bag"></i>Orders
-                              </NavLink>
-                            </li>
-                            <li
-                              className={
-                                location.pathname.startsWith("/wishlist")
-                                  ? "active"
-                                  : ""
-                              }
-                            >
-                              <NavLink exact to="/wishlist">
-                                <i className="fa fa-heart"></i>My Wishlist
                               </NavLink>
                             </li>
                             <li

@@ -28,7 +28,9 @@ const Profile = () => {
       const user = response.data.data.find((user) => user.role === "user");
       setUserData(user);
       if (user.profileimg) {
-        setImage(`${window.react_app_url}public/images/user/${user.profileimg}`);
+        setImage(
+          `${window.react_app_url}public/images/user/${user.profileimg}`
+        );
       }
       stopLoading();
     } catch (error) {
@@ -47,12 +49,12 @@ const Profile = () => {
       reader.readAsDataURL(selectedImage);
     }
   };
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserData((prevUserData) => ({
       ...prevUserData,
-      [name]: value,
+      [name]: name === "gender" && !isEditing ? null : value,
     }));
   };
 
@@ -63,17 +65,17 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     startLoading();
-  
+
     const formDataToSend = new FormData();
     formDataToSend.append("userName", userData?.userName || "");
     formDataToSend.append("email", userData?.email || "");
     formDataToSend.append("phone", userData?.phone || "");
-    formDataToSend.append("gender", userData?.gender || "");    
-  
+    formDataToSend.append("gender", userData?.gender || "");
+
     if (image) {
       formDataToSend.append("profileimg", image);
     }
-  
+
     try {
       const res = await axios.put(
         `${window.react_app_url}${window.user_url}/${userData._id}`,
@@ -84,7 +86,7 @@ const Profile = () => {
           },
         }
       );
-  
+
       if (res.data.status) {
         toast.success(res.data.message, {
           position: "top-right",
@@ -98,7 +100,7 @@ const Profile = () => {
         });
         setIsEditing(false);
         stopLoading();
-        fetchData(); 
+        fetchData();
       }
     } catch (error) {
       console.error("Error updating user data:", error);
@@ -115,7 +117,7 @@ const Profile = () => {
       stopLoading();
     }
   };
-  
+
   const handleCancel = () => {
     setIsEditing(false);
   };
@@ -223,13 +225,16 @@ const Profile = () => {
                     <select
                       id="gender"
                       name="gender"
-                      value={userData.gender}
+                      value={userData.gender || ""}
                       className={`input-field ${
                         !isEditing ? "cursor-not-allowed" : ""
                       }`}
                       onChange={isEditing ? handleInputChange : null}
                       readOnly={!isEditing}
+                      required // Add required attribute
                     >
+                      <option value="">Select Gender</option>{" "}
+                      {/* Add option to select gender */}
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                       <option value="Other">Other</option>

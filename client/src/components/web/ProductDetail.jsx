@@ -544,11 +544,7 @@ const ProductDetail = () => {
                   </div>
 
                   <p className="short-desc">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-                    fringilla augue nec est tristique auctor. Donec non est at
-                    libero vulputate rutrum. Morbi ornare lectus quis justo
-                    gravida semper. Nulla tellus mi, vulputate adipiscing cursus
-                    eu, suscipit id nulla.
+                   {product.shortdescription}
                   </p>
                   {productsStockSize && (
                     <div className="mb-4">
@@ -723,7 +719,7 @@ const ProductDetail = () => {
                   </li>
                   <li className="review-tab">
                     <a data-bs-toggle="tab" href="#riview">
-                      Review (2)
+                      Review ({reviewCount})
                     </a>
                   </li>
                 </ul>
@@ -735,25 +731,7 @@ const ProductDetail = () => {
                     id="description"
                     className="tab-pane show fade in active"
                   >
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Nam fringilla augue nec est tristique auctor. Donec non
-                      est at libero vulputate rutrum. Morbi ornare lectus quis
-                      justo gravida semper. Nulla tellus mi, vulputate
-                      adipiscing cursus eu, suscipit id nulla.
-                    </p>
-                    <p>
-                      Pellentesque aliquet, sem eget laoreet ultrices, ipsum
-                      metus feugiat sem, quis fermentum turpis eros eget velit.
-                      Donec ac tempus ante. Fusce ultricies massa massa. Fusce
-                      aliquam, purus eget sagittis vulputate, sapien libero
-                      hendrerit est, sed commodo augue nisi non neque. Lorem
-                      ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                      tempor, lorem et placerat vestibulum, metus nisi posuere
-                      nisl, in accumsan elit odio quis mi. Cras neque metus,
-                      consequat et blandit et, luctus a nunc. Etiam gravida
-                      vehicula tellus, in imperdiet ligula euismod eget.
-                    </p>
+                    <p>{product.description}</p>
                   </div>
                   <div id="riview" className="tab-pane fade">
                     <div className="reviews">
@@ -772,7 +750,7 @@ const ProductDetail = () => {
                                     />
                                   </div>
                                   <p className="user-info">
-                                    <span>User -</span>{" "}
+                                    <span>{review.name} -</span>{" "}
                                     {formatDate(review.createdAt)}
                                   </p>
                                   <div className="rating user-rating">

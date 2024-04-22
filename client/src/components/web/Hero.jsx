@@ -465,9 +465,9 @@ const Hero = () => {
                                   </li>
                                   <li className="rav-quickviewbtn">
                                     <NavLink
-                                      to="product-detail"
-                                      data-bs-toggle="modal"
+                                      to="/product-details"
                                       title="Quick view"
+                                      onClick={() => updateID(product._id)}
                                     >
                                       <i className="fa fa-eye"></i>
                                     </NavLink>
@@ -544,7 +544,7 @@ const Hero = () => {
           <div className="container">
             <h3>Running with you force of nature</h3>
             <p>
-              Embrace the changing seasons with our Autumn/Winter 2022
+              Embrace the changing seasons with our Autumn/Winter 2024
               collection. Discover transitional pieces designed to keep you
               stylish and comfortable as you navigate the elements. Enjoy a 20%
               discount on selected items and elevate your wardrobe with

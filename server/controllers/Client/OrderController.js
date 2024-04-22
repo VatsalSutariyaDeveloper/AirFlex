@@ -177,9 +177,9 @@ exports.statusChnage = (req, res) => {
 exports.counts = async (req, res) => {
   try {
     const count = await Order.countDocuments({});
-    res.json({ status: true, count: count });
+    res.json({ status: true, count: count }); 
   } catch (error) {
-    res.status(500).json({ status: false, error: "Could not count event" });
+    res.status(500).json({ status: false, error: "Could not count orders" });
   }
 };
 

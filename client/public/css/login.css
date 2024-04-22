@@ -312,10 +312,23 @@ label span:last-child {
 }
 
 input[type="password"] {
-  padding-right: 30px; /* Adjust to accommodate the eye button */
+  padding-right: 30px;
 }
 
 .back_btn{
   margin-top: 20px;
   width: 170px;
+}
+.auth_page_logo {
+  width: 200px;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth_page_logo img {
+  margin-top: -70px;
+  width: 150px;
+  height: auto;
 }

@@ -66,7 +66,7 @@ const FAQs = () => {
                     faqs.map((faq, index) => (
                       <div className="card" key={index}>
                         <div className="card-header" id={`heading${index}`}>
-                          <h5 className="mb-0">
+                          <h5 className="mb-0"> 
                             <a
                               className="collapsed"
                               data-bs-toggle="collapse"

@@ -55,6 +55,11 @@ const ViewProduct = () => {
                   </tr>
 
                   <tr className="px-5 py-5 border border-gray-200 bg-white text-sm">
+                    <th className="p-4">Short Description</th>
+                    <td>{product.shortdescription}</td>
+                  </tr>
+                
+                  <tr className="px-5 py-5 border border-gray-200 bg-white text-sm">
                     <th className="p-4">Description</th>
                     <td>{product.description}</td>
                   </tr>

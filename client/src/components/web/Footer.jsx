@@ -31,7 +31,7 @@ const useFormInput = (initialValue) => {
 
 const Footer = () => {
     const emailInput = useFormInput("Enter your e-mail");
-  const { updateID } = useContext(IDContext);
+  const { updateGender } = useContext(IDContext);
   return (
     <div className="footer">
       <div className="footer-full">
@@ -46,12 +46,11 @@ const Footer = () => {
                   </p>
                   <ul className="footer-contact">
                     <li className="address add">
-                      <i className="fa fa-map-marker"></i>No 40 Baria Sreet
-                      133/2, NewYork, USA.
+                      <i className="fa fa-map-marker"></i>Nikol Road, Ahmedabad, Gujarat. 382350
                     </li>
                     <li className="phone add">
                       <i className="fa fa-phone"></i>
-                      <a href="javascript:void(0)">+91 9999999999</a>
+                      <a href="javascript:void(0)">+91 9313556651</a>
                     </li>
                     <li className="email add">
                       <i className="fa fa-envelope-o"></i>
@@ -112,13 +111,13 @@ const Footer = () => {
                   <h4>Categories</h4>
                   <ul>
                     <li>
-                      <NavLink to="/shop" onClick={() => updateID("male")}>Male</NavLink>
+                      <NavLink to="/shop" onClick={() => updateGender("male")}>Male</NavLink>
                     </li>
                     <li>
-                      <NavLink to="/shop" onClick={() => updateID("female")}>Female</NavLink>
+                      <NavLink to="/shop" onClick={() => updateGender("female")}>Female</NavLink>
                     </li>
                     <li>
-                      <NavLink to="/shop" onClick={() => updateID("kids")}>Kids</NavLink>
+                      <NavLink to="/shop" onClick={() => updateGender("kids")}>Kids</NavLink>
                     </li>
                   </ul>
                 </div>

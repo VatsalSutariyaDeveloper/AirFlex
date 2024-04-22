@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Authentication() {
-  const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -172,16 +171,22 @@ function Authentication() {
       }
 
       if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/.test(formData.password)) {
-        setPasswordError(
-          "Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one digit."
+        toast.warning(
+          "Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one digit.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
         );
         // stopLoading();
         return;
       }
-
-      setPasswordError(
-        "Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one digit."
-      );
 
       if (formData.password !== formData.confirmPassword) {
         toast.warning("Passwords do not match.", {
@@ -252,7 +257,7 @@ function Authentication() {
         <br />
         <div className={`cont ${isSignUp ? "s--signup" : ""}`}>
           <div className="form sign-in">
-            <h2>Welcome</h2>
+            <h2>Welcome to AirFlex</h2>
             <label>
               <span>Email</span>
               <input
@@ -274,9 +279,9 @@ function Authentication() {
                 {showPassword ? <FaEye /> : <FaEyeSlash />}
               </span>
             </label>
-            <p className="forgot-pass">
+            {/* <p className="forgot-pass">
               <NavLink to="/forgot-password">Forgot password?</NavLink>
-            </p>
+            </p> */}
             <button type="button" className="submit" onClick={handleSubmit}>
               Sign In
             </button>
@@ -284,12 +289,18 @@ function Authentication() {
           <div className="sub-cont">
             <div className="img">
               <div className="img__text m--up">
+                <div className="auth_page_logo">
+                  <img src="images/menu/logo/logo.png" alt="" />
+                </div>
                 <h3>
                   Don't have an account?
                   <br></br>Please Sign up!
                 </h3>
               </div>
               <div className="img__text m--in">
+                <div className="auth_page_logo">
+                  <img src="images/menu/logo/logo.png" alt="" />
+                </div>
                 <h3>If you already have an account, just sign in.</h3>
               </div>
               <div className="img__btn" onClick={handleToggle}>
@@ -301,11 +312,11 @@ function Authentication() {
                 </span>
               </div>
               <NavLink to="/">
-              <div className="img__btn back_btn">
-                <span>
-                <b>Back To Home</b>
-                </span>
-              </div>
+                <div className="img__btn back_btn">
+                  <span>
+                    <b>Back To Home</b>
+                  </span>
+                </div>
               </NavLink>
             </div>
             <div className="form sign-up">

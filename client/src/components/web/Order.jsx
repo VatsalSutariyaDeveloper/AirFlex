@@ -63,11 +63,17 @@ const Order = () => {
               ) : (
                 <div className="table-content table-responsive">
                   <table className="table">
-                    {/* Table headers */}
                     <thead>
-                      {/* Table rows */}
                       <tr>
-                        {/* Table cells */}
+                        <th>Order Id</th>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Size</th>
+                        <th>Qty</th>
+                        <th>Product Price</th>
+                        <th>Payment Type</th>
+                        <th>Order Date</th>
+                        <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
